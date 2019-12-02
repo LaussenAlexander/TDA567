@@ -1,0 +1,36 @@
+A: public void setRequiredNumber(int nemployee, int starttime, int endtime) { ... }
+sets the number of required working employees to nemployee for all hours in the interval starttime to endtime.
+
+
+input space:
+            nemployee in {0, 1, ..., MAX_INT}
+            starttime in { MIN_INT, MIN_INT+1, ..., MAX_INT }
+            endtime in { MIN_INT, MIN_INT+1, ..., MAX_INT }
+
+partition_1: starttime > endtime and nemployee in its input space.
+test_partition_1: input: nemployee=5; starttime=1; endtime=0;
+expected: no changes to any requiredNumber in WeekSchedule-object.
+
+partition_2: starttime <= endtime and (starttime < 0 or endtime > size-1), nemployee in its input space.
+test_partition_2: nemployee=5; starttime=-2; endtime=-1;
+expected: exception: nullpointer error?
+
+partition_3:  starttime <= endtime and (starttime >= 0 and endtime < size), nemployee < workingEmployees.length().
+test_partition_3: nemployee = 0; starttime=0; endtime=0; (workingEmployees.length set to 1).
+expected: workingemployees to be emptied and requiredNumber set to 0 for Hours 0-1.
+
+partition_4: starttime <= endtime and starttime >= 0 and endtime < size, nemployee >= workingEmployees.length().
+test_partition_4: nemployee = 1; starttime=0; endtime=0; (workingEmployees.length set to 0).
+expected: requiredNumber set to nemployee.
+
+B: public int nextIncomplete(int currenttime) { ... }
+
+input space:
+    currenttime {0, 1, ..., size-1}
+
+partition_1: size=2; requiredNumber = workingEmployees.length for each Hour
+test_partition_1: size=2; For each Hour: workingEmployees=[]; requiredNumber=0; expected: return -1.
+
+partition_2: size=2; requiredNumber = workingEmployees.length for every Hour but the last where requiredNumber > workingEmployees.length
+test_partition_2: size=2; for all Hours until the last workingEmployees=[emp] and requiredNumber=1;
+                For the last Hour workingEmployees =[emp] and requiredNumber = 2; expected: returns 1.
